@@ -1,4 +1,4 @@
-# 02_figures.R
+# 02_figures.Ry
 # Queries the BigQuery tables directly from R (bigrquery) and makes figures.
 
 library(bigrquery)
