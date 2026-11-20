@@ -2,11 +2,13 @@
 
 An analysis of 76 fire seasons of British Columbia wildfire records (1950 to 2025) using **Google BigQuery** and **BigQuery GIS**, with results pulled into R for visualisation.
 
-**Live site:** [emmabranch.github.io/bc-wildfire-bigquery](https://emmabranch.github.io/bc-wildfire-bigquery/)
-
-The project loads BC Wildfire Service fire incident points and fire perimeter polygons into BigQuery, builds GEOGRAPHY columns, and uses SQL to summarise fire counts and area burned by year, fire centre, and cause. It also runs a spatial query measuring area burned near five BC communities.
+**Live site:** https://emmabranch.github.io/bc-wildfire-bigquery/ · **More projects:** [github.com/emmabranch](https://github.com/emmabranch)
 
 ![Annual fires and area burned](figures/fig1_annual_fires_area.png)
+
+## What it does
+
+The project loads BC Wildfire Service fire incident points and fire perimeter polygons into BigQuery, builds GEOGRAPHY columns, and uses SQL to summarise fire counts and area burned by year, fire centre, and cause. It also runs a spatial query measuring area burned near five BC communities.
 
 ## Key findings
 
@@ -32,7 +34,7 @@ The project loads BC Wildfire Service fire incident points and fire perimeter po
 
 ![Area burned by fire centre and decade](figures/fig2_area_by_centre_decade.png)
 
-## Data
+## Data and licences
 
 | Dataset | Description | Records |
 |---|---|---|
@@ -70,20 +72,6 @@ The project loads BC Wildfire Service fire incident points and fire perimeter po
 6. **Visualisation (`R/02_figures.R`):**
    - Queried BigQuery directly from R with [`bigrquery`](https://bigrquery.r-dbi.org/) and plotted with ggplot2.
 
-## Limitations
-
-- **Perimeter mapping has changed over time.**
-  - Before about 2006, few small fires were mapped. For example, 2001 and 2002 have only 10 to 15 perimeters each.
-  - Fire counts therefore come from incident points.
-  - Area totals are dominated by large fires, which were mapped throughout, but early totals may be slightly underestimated.
-- **Holdover fires:**
-  - Some fires overwinter and are recorded again in the following season under a new number. For example, the 2024 Nogah Creek fire has a 2023 ignition date.
-  - Some area may be counted in more than one season.
-- **Reburns:** area that burned more than once is counted each time, including in the 50 km community totals.
-- **Incomplete decade:** the 2020s figures cover six seasons (2020 to 2025), and the decade averages account for this.
-- **Simplified geometry:** perimeters were simplified to 50 m, which is suitable for provincial summaries but not for parcel-level work.
-- **Descriptive only:** no adjustment is made for changes in detection, suppression policy, reporting, or climate.
-
 ## Repository structure
 
 ```
@@ -119,10 +107,24 @@ bc-wildfire-bigquery/
 
 Note: BigQuery sandbox tables expire after 60 days, so this repository holds the full pipeline and the saved results rather than relying on the cloud tables persisting.
 
-## Tools
+Built with Google BigQuery (sandbox), BigQuery GIS, SQL, R (bcdata, sf, dplyr, bigrquery, ggplot2), Quarto, Git, and GitHub.
 
-Google BigQuery (sandbox), BigQuery GIS, SQL, R (bcdata, sf, dplyr, bigrquery, ggplot2), Git and GitHub.
+## Limitations
 
-## Author
+- **Perimeter mapping has changed over time.**
+  - Before about 2006, few small fires were mapped. For example, 2001 and 2002 have only 10 to 15 perimeters each.
+  - Fire counts therefore come from incident points.
+  - Area totals are dominated by large fires, which were mapped throughout, but early totals may be slightly underestimated.
+- **Holdover fires:**
+  - Some fires overwinter and are recorded again in the following season under a new number. For example, the 2024 Nogah Creek fire has a 2023 ignition date.
+  - Some area may be counted in more than one season.
+- **Reburns:** area that burned more than once is counted each time, including in the 50 km community totals.
+- **Incomplete decade:** the 2020s figures cover six seasons (2020 to 2025), and the decade averages account for this.
+- **Simplified geometry:** perimeters were simplified to 50 m, which is suitable for provincial summaries but not for parcel-level work.
+- **Descriptive only:** no adjustment is made for changes in detection, suppression policy, reporting, or climate.
 
-Emma Branch, epidemiologist and PhD candidate, University of British Columbia. [github.com/emmabranch](https://github.com/emmabranch)
+## About me
+
+I'm Emma Branch, an epidemiologist and data analyst in British Columbia, and a PhD candidate in Population and Public Health at the University of British Columbia. I've spent about 10 years working with health research data, including registry analytics, REDCap database design, data governance, and performance measurement. I mostly work in R, SAS, and SQL, and build reports and tools with Quarto, Shiny, leaflet, and Power BI. Lately I've been applying the same habits to environmental and ocean data, mostly because I like maps and fish.
+
+[More projects](https://github.com/emmabranch) · [LinkedIn](https://www.linkedin.com/in/embranch/) · emma.branch@gmail.com
