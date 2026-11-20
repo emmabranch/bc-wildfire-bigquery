@@ -2,6 +2,8 @@
 
 An analysis of 75 years of British Columbia wildfire records (1950 to 2025) using **Google BigQuery** and **BigQuery GIS**, with results pulled into R for visualisation.
 
+**Live site:** [emmabranch.github.io/bc-wildfire-bigquery](https://emmabranch.github.io/bc-wildfire-bigquery/)
+
 The project loads BC Wildfire Service fire incident points and fire perimeter polygons into BigQuery, builds GEOGRAPHY columns, and uses SQL to summarise fire counts and area burned by year, fire centre, and cause. It also runs a spatial query measuring area burned near five BC communities.
 
 ![Annual fires and area burned](figures/fig1_annual_fires_area.png)
