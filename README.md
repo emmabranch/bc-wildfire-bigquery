@@ -46,6 +46,8 @@ The project loads BC Wildfire Service fire incident points and fire perimeter po
 - **Accessed:** 16 November 2026
 - Neither dataset is intended for legal purposes. Raw data are not stored in this repository; `R/01_download_data.R` re-downloads them.
 
+Code: MIT licence (see [`LICENSE`](LICENSE)). Data keep their original licences, listed above.
+
 ## Methods
 
 1. **Extraction (R):**
