@@ -1,0 +1,155 @@
+---
+title: "Explore the data"
+subtitle: "Interactive charts of BC wildfire seasons, 1950 to 2025. Hover over any chart for exact values."
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(readr)
+library(dplyr)
+library(tidyr)
+library(plotly)
+library(sf)
+library(scales)
+library(knitr)
+
+annual <- read_csv("results/annual.csv", show_col_types = FALSE)
+centre <- read_csv("results/centre_decade.csv", show_col_types = FALSE)
+cause  <- read_csv("results/cause.csv", show_col_types = FALSE)
+comm   <- read_csv("results/communities.csv", show_col_types = FALSE)
+large  <- st_read("results/large_fires.geojson", quiet = TRUE) |> st_drop_geometry()
+
+ember <- "#b33a0e"
+amber <- "#f4a259"
+```
+
+## Fire seasons, year by year
+
+The top panel shows area burned and the bottom panel shows the number of fires. Recent seasons stand out in the top panel but not in the bottom one.
+
+```{r}
+#| label: annual
+p_area <- plot_ly(
+  annual, x = ~fire_year, y = ~area_burned_ha / 1000, type = "bar",
+  marker = list(color = ember),
+  hovertemplate = "%{x}: %{y:,.0f} thousand ha<extra></extra>"
+)
+p_fires <- plot_ly(
+  annual, x = ~fire_year, y = ~n_fires, type = "bar",
+  marker = list(color = amber),
+  hovertemplate = "%{x}: %{y:,} fires<extra></extra>"
+)
+
+subplot(p_area, p_fires, nrows = 2, shareX = TRUE, titleY = TRUE) |>
+  layout(
+    showlegend = FALSE,
+    yaxis  = list(title = "Area burned<br>(thousand ha)"),
+    yaxis2 = list(title = "Number of fires"),
+    xaxis  = list(title = ""),
+    margin = list(l = 70)
+  ) |>
+  config(displayModeBar = FALSE)
+```
+
+## Where area burned has grown
+
+Mean area burned per season, by fire centre and decade. The colour scale is logarithmic, so each step is ten times larger than the last. Hover for the actual values.
+
+```{r}
+#| label: heatmap
+heat <- centre |>
+  filter(!is.na(mean_annual_area_ha)) |>
+  mutate(decade = paste0(decade, "s"))
+
+plot_ly(
+  heat, x = ~decade, y = ~fire_centre,
+  z = ~log10(mean_annual_area_ha + 1),
+  customdata = ~mean_annual_area_ha / 1000,
+  type = "heatmap",
+  colors = colorRamp(c("#fbe9d7", "#f4a259", "#e4572e", "#a4161a", "#4a0b0b")),
+  hovertemplate = "%{y} Fire Centre, %{x}<br>%{customdata:,.1f} thousand ha per season<extra></extra>",
+  colorbar = list(
+    title = "Hectares<br>per season",
+    tickvals = log10(c(1e3, 1e4, 1e5, 1e6)),
+    ticktext = c("1,000", "10,000", "100,000", "1,000,000")
+  )
+) |>
+  layout(xaxis = list(title = ""), yaxis = list(title = "")) |>
+  config(displayModeBar = FALSE)
+```
+
+The 2020s cover six seasons (2020 to 2025), and their averages are calculated over six seasons, not ten.
+
+## Lightning versus people
+
+Lightning and people start similar numbers of fires, but lightning fires account for most of the area burned. They tend to start in remote areas, where they can grow large before they are reached.
+
+```{r}
+#| label: cause
+cause_long <- cause |>
+  select(cause, pct_fires, pct_area) |>
+  pivot_longer(-cause, names_to = "measure", values_to = "pct") |>
+  mutate(measure = recode(measure,
+    pct_fires = "Share of fires",
+    pct_area  = "Share of area burned"
+  ))
+
+plot_ly(
+  cause_long, y = ~cause, x = ~pct, color = ~measure,
+  colors = c("Share of fires" = amber, "Share of area burned" = ember),
+  type = "bar", orientation = "h",
+  hovertemplate = "%{y}: %{x:.1f}%<extra></extra>"
+) |>
+  layout(
+    barmode = "group",
+    xaxis = list(title = "", ticksuffix = "%"),
+    yaxis = list(title = "", categoryorder = "array",
+                 categoryarray = rev(c("Lightning", "Person", "Unknown"))),
+    legend = list(orientation = "h", y = -0.15)
+  ) |>
+  config(displayModeBar = FALSE)
+```
+
+## Fire near communities
+
+Total area burned within 50 km of five BC communities, by decade. BigQuery GIS clipped each fire perimeter to a 50 km buffer around each community, so only the nearby burned area is counted. The 2020s total covers six seasons only.
+
+```{r}
+#| label: communities
+plot_ly(
+  comm, x = ~paste0(decade, "s"), y = ~area_burned_within_50km_ha / 1000,
+  color = ~community,
+  colors = c("#1c1310", ember, amber, "#7a8b99", "#2a6f97"),
+  type = "scatter", mode = "lines+markers",
+  hovertemplate = "%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}</extra>"
+) |>
+  layout(
+    xaxis = list(title = ""),
+    yaxis = list(title = "Area burned within 50 km<br>(thousand ha)"),
+    legend = list(orientation = "h", y = -0.15)
+  ) |>
+  config(displayModeBar = FALSE)
+```
+
+Areas that burned more than once are counted each time.
+
+## The 15 largest fires since 1950
+
+```{r}
+#| label: largest
+large |>
+  arrange(desc(size_ha)) |>
+  slice_head(n = 15) |>
+  transmute(
+    Year = fire_year,
+    Fire = trimws(coalesce(incident_name, fire_number)),
+    `Fire number` = fire_number,
+    `Fire centre` = fire_centre,
+    Cause = cause,
+    `Size (ha)` = comma(round(size_ha))
+  ) |>
+  kable(align = "llllr")
+```
+
+"Holdover" fires started in one season, smouldered over winter, and flared up again the next year.

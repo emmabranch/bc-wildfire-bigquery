@@ -1,0 +1,39 @@
+---
+title: "About"
+---
+
+## About this project
+
+I built this project to get hands-on experience with **Google BigQuery** and **BigQuery GIS**, using a dataset I care about. My PhD research looks at wildfire smoke exposure and perinatal and infant health in British Columbia, so I wanted to understand the fire record behind the smoke.
+
+The project covers a full, small-scale cloud data workflow:
+
+- extracting open government data in R
+- loading it into BigQuery
+- cleaning and checking it with SQL
+- running spatial queries with BigQuery GIS
+- querying BigQuery from R to build the charts and maps on this site
+
+The [Methods and SQL](methods.qmd) page documents every step, including the problems I ran into and how I handled them.
+
+This is an independent portfolio project. It is not affiliated with or endorsed by the BC Wildfire Service or the Government of British Columbia.
+
+## About me
+
+I'm Emma Branch, an epidemiologist and population health researcher, and a PhD candidate in epidemiology at the University of British Columbia. I like turning complex data into clear evidence that people can act on.
+
+## Other projects
+
+- [Climate resilience and equity profile of VCH communities](https://emmabranch.github.io/vch-climate-equity-profile/): social vulnerability to heat and wildfire smoke, mapped alongside green cover
+- [BC fish stock status](https://emmabranch.github.io/bc-fish-stock-status/): an exploratory rapid assessment toolkit for ten BC fish stocks
+- [BC housing indicators](https://emmabranch.github.io/bc-housing-indicators/): an indicator framework and scorecard for 40 BC municipalities
+- [BC lightstation sea temperature QC](https://emmabranch.github.io/bc-lightstation-qc/): quality-controlling CIOOS ocean data and mapping the 2014 to 2016 marine heatwave
+- [REDCap starter kit](https://emmabranch.github.io/redcap-starter-kit/): a REDCap data pipeline with quality checks and reporting
+- [BC Salmon Explorer](https://emmabranch.shinyapps.io/bc-salmon-explorer): an R Shiny app mapping nearly 7,000 salmon spawning streams
+
+More on [GitHub](https://github.com/emmabranch).
+
+## Get in touch
+
+- [LinkedIn](https://www.linkedin.com/in/embranch/)
+- emma.branch@gmail.com

@@ -1,0 +1,151 @@
+---
+pagetitle: "BC wildfire history in BigQuery"
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(readr)
+library(dplyr)
+library(sf)
+library(leaflet)
+library(scales)
+library(htmltools)
+
+annual      <- read_csv("results/annual.csv", show_col_types = FALSE)
+cause       <- read_csv("results/cause.csv", show_col_types = FALSE)
+communities <- read_csv("results/communities.csv", show_col_types = FALSE)
+large       <- st_read("results/large_fires.geojson", quiet = TRUE) |>
+  # A few shapes came back as geometry collections (polygons plus stray lines
+  # or points); keep only the polygon parts so leaflet can draw them
+  st_collection_extract("POLYGON") |>
+  st_cast("MULTIPOLYGON")
+
+# Headline numbers, calculated from the saved BigQuery results
+area_2023     <- annual$area_burned_ha[annual$fire_year == 2023]
+mean_recent   <- mean(annual$area_burned_ha[annual$fire_year >= 2020])
+large_recent  <- sum(annual$n_large_fires[annual$fire_year >= 2020], na.rm = TRUE)
+lightning_pct <- cause$pct_area[cause$cause == "Lightning"]
+
+mha <- function(x) paste0(number(x / 1e6, accuracy = 0.01), "M")
+```
+
+::::: {.hero-full .column-screen style="background-image: url('figures/banner_stripes.png');"}
+
+:::: {.hero-inner}
+
+[Portfolio project · Google BigQuery · BigQuery GIS · R]{.eyebrow}
+
+# Fewer fires. [Far more burned.]{.accent}
+
+75 years of BC Wildfire Service records, loaded into Google BigQuery and analysed with SQL and BigQuery GIS. The number of fires each season hasn't gone up, but the area they burn has.
+
+[Explore the data](explore.qmd){.btn .btn-accent} [How it was built](methods.qmd){.btn .btn-ghost} [Code on GitHub](https://github.com/emmabranch/bc-wildfire-bigquery){.btn .btn-ghost}
+
+[Banner: one stripe per fire season, 1950 to 2025. Brighter stripes mean more area burned.]{.hero-note}
+
+::::
+
+```{=html}
+<svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,40 C240,80 480,0 720,30 C960,60 1200,10 1440,40 L1440,80 L0,80 Z" fill="#ffffff"></path>
+</svg>
+```
+
+:::::
+
+:::: {.stat-row .lift}
+
+::: {.stat-box}
+[`r mha(area_2023)`]{.num}
+[hectares burned in 2023, nearly three times any earlier season]{.lab}
+:::
+
+::: {.stat-box}
+[`r mha(mean_recent)`]{.num}
+[hectares burned per year on average, 2020 to 2025]{.lab}
+:::
+
+::: {.stat-box}
+[`r large_recent`]{.num}
+[fires of 10,000 ha or more since 2020, compared with 6 in the whole of the 1990s]{.lab}
+:::
+
+::: {.stat-box}
+[`r round(lightning_pct)`%]{.num}
+[of area burned since 1950 came from lightning-caused fires]{.lab}
+:::
+
+::::
+
+## Where the largest fires burned
+
+Every fire of 10,000 hectares or more from 1950 to 2025 (`r nrow(large)` fires), coloured by decade. Click a fire for its details, or use the layer menu (top right) to show or hide decades. Dashed circles mark 50 km around five communities used in the spatial analysis.
+
+```{r}
+#| label: map
+large <- large |>
+  mutate(
+    decade = paste0(floor(fire_year / 10) * 10, "s"),
+    name   = trimws(coalesce(incident_name, fire_number)),
+    popup  = sprintf(
+      "<strong>%s</strong><br>%s · %s Fire Centre<br>%s ha · cause: %s",
+      htmlEscape(name), fire_year, fire_centre,
+      comma(round(size_ha)), tolower(cause)
+    )
+  ) |>
+  arrange(fire_year)
+
+decades <- sort(unique(large$decade))
+pal <- colorFactor(
+  colorRampPalette(c("#f6d7a7", "#f4a259", "#e4572e", "#a4161a", "#4a0b0b"))(length(decades)),
+  levels = decades
+)
+
+comm <- distinct(communities, community, lon, lat)
+
+m <- leaflet(height = 620) |>
+  addProviderTiles(providers$Esri.WorldGrayCanvas)
+
+# One layer per decade, oldest first, so recent fires are drawn on top
+for (d in decades) {
+  m <- m |>
+    addPolygons(
+      data = filter(large, decade == d),
+      group = d,
+      fillColor = pal(d), fillOpacity = 0.65,
+      color = "#5a1a0a", weight = 0.4,
+      popup = ~popup,
+      highlightOptions = highlightOptions(weight = 2, color = "#1c1310", bringToFront = TRUE)
+    )
+}
+
+m |>
+  addCircles(
+    data = comm, lng = ~lon, lat = ~lat, radius = 50000,
+    group = "50 km around communities",
+    color = "#1c1310", weight = 1.5, fill = FALSE, dashArray = "5 5"
+  ) |>
+  addCircleMarkers(
+    data = comm, lng = ~lon, lat = ~lat, radius = 4,
+    group = "50 km around communities",
+    stroke = FALSE, fillColor = "#1c1310", fillOpacity = 1, label = ~community
+  ) |>
+  addLegend("bottomright", pal = pal, values = decades, title = "Decade", opacity = 0.9) |>
+  addLayersControl(
+    overlayGroups = c(decades, "50 km around communities"),
+    options = layersControlOptions(collapsed = TRUE)
+  )
+```
+
+## What the data show
+
+- **Area burned has risen sharply while the number of fires has not.** Annual fire counts since 2020 are within or below the historical range, but the average area burned each year is many times higher than in earlier decades.
+- **2023 was an extreme outlier.** About `r mha(area_2023)` hectares burned, nearly three times the next largest seasons, 2018 and 2017.
+- **Lightning drives most of the area burned.** Lightning caused about half of all fires but `r round(lightning_pct)`% of area burned.
+- **Area burned is concentrated in the north.** The Prince George Fire Centre accounts for over half of all area burned since 1950.
+- **Area burned near communities has increased.** Within 50 km of Kamloops, more land burned from 2020 to 2025 than in any earlier decade.
+
+::: {.disclaimer}
+This is an independent portfolio project using open BC Wildfire Service data. It is not an official BC Wildfire Service product, and it is not intended for legal, planning, or insurance decisions. See [Methods and SQL](methods.qmd) for data sources, cleaning steps, and limitations.
+:::

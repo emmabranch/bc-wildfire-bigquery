@@ -1,0 +1,145 @@
+---
+title: "Methods and SQL"
+subtitle: "How the data were extracted, loaded into Google BigQuery, cleaned, checked, and analysed."
+---
+
+## The pipeline
+
+::::: {.pipeline}
+
+:::: {.pipe-step}
+**1. Extract (R)**
+Downloaded two BC Data Catalogue layers with `bcdata`, one fire season at a time.
+::::
+
+:::: {.pipe-step}
+**2. Prepare (R)**
+Harmonised column types, repaired and simplified shapes, and exported CSVs with geometry as WKT text.
+::::
+
+:::: {.pipe-step}
+**3. Load (BigQuery)**
+Uploaded both files to a BigQuery sandbox dataset, with an explicit schema for the incidents.
+::::
+
+:::: {.pipe-step}
+**4. Transform and check (SQL)**
+Built GEOGRAPHY columns, cleaned dates, and ran data quality checks.
+::::
+
+:::: {.pipe-step}
+**5. Analyse and share (SQL, R)**
+Summarised by year, fire centre, and cause, ran a spatial query, and pulled the results into R with `bigrquery`.
+::::
+
+:::::
+
+All the code is in the [GitHub repository](https://github.com/emmabranch/bc-wildfire-bigquery): R scripts in `R/` and SQL in `sql/`.
+
+## Data
+
+| Dataset | What it contains | Records |
+|---|---|---|
+| [BC Wildfire Fire Incident Locations - Historical](https://catalogue.data.gov.bc.ca/dataset/bc-wildfire-fire-incident-locations-historical) | One point per incident tracked by BC Wildfire Service, with year, cause, fire centre, and dates | 200,479 |
+| [BC Wildfire Fire Perimeters - Historical](https://catalogue.data.gov.bc.ca/dataset/bc-wildfire-fire-perimeters-historical) | Mapped fire perimeter polygons, with size in hectares | 24,751 |
+
+Both datasets are published by the Government of British Columbia (BC Wildfire Service) through the BC Data Catalogue, and were accessed in November 2026. They are not intended for legal purposes.
+
+## Problems found, and how they were handled
+
+- **Large downloads failed.** Requesting all 200,479 incidents at once failed partway through, so the download was split into one request per fire season, with automatic retries.
+- **Column types changed between years.** For example, `VERSION_NUMBER` is text in some years and a number in others. Mixed columns were converted to text before combining.
+- **Impossible dates.** BigQuery rejected three rows on load because of ignition dates with years such as 223 and 915. The incidents were reloaded with dates as text, then parsed in SQL with `SAFE.PARSE_DATE`. In total, five dates before 1900 were set to missing. Annual summaries use `FIRE_YEAR`, so they are not affected.
+- **Non-fire incidents.** Only 156,624 of the 200,479 incidents are true fires. The rest are nuisance fires, smoke chases, duplicates, and other incident types. Fire counts use `FIRE_TYPE = 'Fire'` only.
+
+## Data quality checks
+
+- **Geometry:** all 200,479 points and 24,751 perimeters produced valid BigQuery geographies.
+- **Area:** for the largest fires, area calculated from the polygons with `ST_AREA` was within about 0.5% of the recorded size. That is consistent with simplifying the shapes to 50 m.
+- **Fire centre:** derived from the first letter of the fire number, and cross-checked against the `FIRE_CENTRE` code. Each letter matched exactly one code for all 156,624 fires.
+
+## Key SQL
+
+### Building geography columns
+
+```sql
+-- Points: build a geography from longitude and latitude
+CREATE OR REPLACE TABLE `bc-wildfire-bigquery.bc_wildfire.incidents` AS
+SELECT
+  * EXCEPT (IGNITION_DATE, FIRE_OUT_DATE),
+  IF(SAFE.PARSE_DATE('%Y-%m-%d', IGNITION_DATE) >= DATE '1900-01-01',
+     SAFE.PARSE_DATE('%Y-%m-%d', IGNITION_DATE), NULL) AS IGNITION_DATE,
+  IF(SAFE.PARSE_DATE('%Y-%m-%d', FIRE_OUT_DATE) >= DATE '1900-01-01',
+     SAFE.PARSE_DATE('%Y-%m-%d', FIRE_OUT_DATE), NULL) AS FIRE_OUT_DATE,
+  ST_GEOGPOINT(LONGITUDE, LATITUDE) AS geog
+FROM `bc-wildfire-bigquery.bc_wildfire.fire_incidents_raw`;
+
+-- Polygons: parse WKT text, repairing minor geometry problems
+CREATE OR REPLACE TABLE `bc-wildfire-bigquery.bc_wildfire.perimeters` AS
+SELECT
+  * EXCEPT (geometry_wkt),
+  SAFE.ST_GEOGFROMTEXT(geometry_wkt, make_valid => TRUE) AS geog
+FROM `bc-wildfire-bigquery.bc_wildfire.fire_perimeters_raw`;
+```
+
+### Area burned within 50 km of communities
+
+```sql
+-- ST_DWITHIN finds perimeters within 50 km; ST_INTERSECTION clips each
+-- perimeter to a 50 km buffer so only the nearby burned area is counted.
+WITH communities AS (
+  SELECT name, ST_GEOGPOINT(lon, lat) AS pt
+  FROM UNNEST([
+    STRUCT('Kamloops' AS name, -120.327 AS lon, 50.675 AS lat),
+    ('Kelowna', -119.496, 49.888),
+    ('Prince George', -122.749, 53.917),
+    ('Williams Lake', -122.141, 52.141),
+    ('Fort St. John', -120.846, 56.252)
+  ])
+)
+SELECT
+  c.name AS community,
+  DIV(p.FIRE_YEAR, 10) * 10 AS decade,
+  COUNT(*) AS n_fires_within_50km,
+  SUM(ST_AREA(ST_INTERSECTION(p.geog, ST_BUFFER(c.pt, 50000)))) / 10000
+    AS area_burned_within_50km_ha
+FROM communities AS c
+JOIN `bc-wildfire-bigquery.bc_wildfire.perimeters` AS p
+  ON ST_DWITHIN(p.geog, c.pt, 50000)
+WHERE p.FIRE_YEAR BETWEEN 1950 AND 2025
+GROUP BY community, decade
+ORDER BY community, decade;
+```
+
+### Preparing shapes for the web map
+
+```sql
+-- One row per large fire, with shapes simplified to 250 m in BigQuery
+-- so the web map stays fast
+SELECT
+  p.FIRE_YEAR, p.FIRE_NUMBER, i.INCIDENT_NAME, p.FIRE_SIZE_HECTARES,
+  ST_ASTEXT(ST_SIMPLIFY(p.geog, 250)) AS wkt
+FROM `bc-wildfire-bigquery.bc_wildfire.perimeters` AS p
+LEFT JOIN `bc-wildfire-bigquery.bc_wildfire.incidents` AS i
+  ON i.FIRE_NUMBER = p.FIRE_NUMBER
+ AND i.FIRE_YEAR = p.FIRE_YEAR
+ AND i.FIRE_TYPE = 'Fire'
+WHERE p.FIRE_SIZE_HECTARES >= 10000
+QUALIFY ROW_NUMBER() OVER (
+  PARTITION BY p.FIRE_NUMBER, p.FIRE_YEAR ORDER BY i.IGNITION_DATE
+) = 1;
+```
+
+The full set of queries is in [`sql/`](https://github.com/emmabranch/bc-wildfire-bigquery/tree/main/sql). Each analysis query processed between about 14 and 31 MB, well within the BigQuery sandbox's free monthly allowance.
+
+## Why the results are saved as files
+
+BigQuery sandbox tables expire after 60 days. The analysis was run once in BigQuery, and the results were saved to the repository (`R/03_export_results.R`), so this site keeps working after the cloud tables expire. The full pipeline can be rerun from the scripts.
+
+## Limitations
+
+- **Perimeter mapping has changed over time.** Before about 2006, few small fires were mapped, so fire counts come from incident points. Area totals are dominated by large fires, which were mapped throughout, but early totals may be slightly underestimated.
+- **Holdover fires.** Some fires overwinter and are recorded again the next season under a new number, so some area may be counted in more than one season.
+- **Reburns.** Area that burned more than once is counted each time, including in the 50 km community totals.
+- **Simplified shapes.** Perimeters were simplified to 50 m for analysis and 250 m for the map. That is fine for provincial summaries, but not for property-level work.
+- **Descriptive only.** No adjustment is made for changes in detection, suppression policy, reporting, or climate.

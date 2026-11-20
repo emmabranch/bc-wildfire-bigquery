@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Explore the data – BC wildfire history</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-cdbe5f287ce4ac4736b6c9816ed836ea.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="site_libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+
+</head>
+
+<body class="nav-fixed fullcontent quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">BC wildfire history</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Overview</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./explore.html" aria-current="page"> 
+<span class="menu-text">Explore</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./methods.html"> 
+<span class="menu-text">Methods and SQL</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/emmabranch/bc-wildfire-bigquery"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+            <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Explore the data</h1>
+<p class="subtitle lead">Interactive charts of BC wildfire seasons, 1950 to 2025. Hover over any chart for exact values.</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="fire-seasons-year-by-year" class="level2">
+<h2 class="anchored" data-anchor-id="fire-seasons-year-by-year">Fire seasons, year by year</h2>
+<p>The top panel shows area burned and the bottom panel shows the number of fires. Recent seasons stand out in the top panel but not in the bottom one.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-4eadb20055566eb0972e" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-4eadb20055566eb0972e">{"x":{"data":[{"x":[1950,1951,1952,1953,1954,1955,1956,1957,1958,1959,1960,1961,1962,1963,1964,1965,1966,1967,1968,1969,1970,1971,1972,1973,1974,1975,1976,1977,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[393.19529999999975,174.09210000000019,68.881299999999996,25.534599999999998,3.797000000000001,22.48810000000001,217.62339999999992,28.487599999999997,861.06649999999922,121.22959999999998,126.9254,509.79909999999967,17.205499999999997,20.112599999999997,3.079699999999999,131.21860000000009,23.208500000000019,111.2945,17.7958,163.29660000000013,101.54430000000008,343.3461999999999,22.82859999999998,33.895499999999991,21.112500000000011,24.283900000000003,50.785500000000013,3.1258000000000004,47.995300000000022,24.518000000000004,63.298099999999998,115.51670000000004,354.33710000000008,78.113700000000023,20.187400000000004,230.36699999999999,16.636499999999998,32.128599999999992,5.9928000000000017,22.180299999999995,69.474299999999999,23.939900000000002,24.119299999999996,4.2443999999999997,23.245499999999996,47.809199999999997,21.685299999999991,2.0579999999999994,78.667299999999983,14.8858,4.807100000000001,6.4118000000000004,4.2195999999999998,233.2589999999999,196.52379999999999,25.040200000000002,139.1771,25.614800000000024,13.400800000000011,245.05249999999992,322.1053000000004,12.9833,100.56000000000007,58.033299999999969,363.55779999999999,283.41420000000011,121.99939999999998,1222.2054000000005,1350.8078000000014,21.775499999999997,14.3453,863.52909999999986,132.11779999999996,3855.6932999999995,908.61620000000039,885.10259999999948],"marker":{"color":"#b33a0e","line":{"color":"rgba(31,119,180,1)"}},"hovertemplate":["%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>","%{x}: %{y:,.0f} thousand ha<extra><\/extra>"],"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1950,1951,1952,1953,1954,1955,1956,1957,1958,1959,1960,1961,1962,1963,1964,1965,1966,1967,1968,1969,1970,1971,1972,1973,1974,1975,1976,1977,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[1436,1799,1739,1274,707,1248,1853,1240,3039,1469,2632,3099,1533,2343,1121,2686,1966,3213,1646,2314,4002,2895,1904,2861,2559,2710,893,1854,2308,3849,1743,2737,2205,1705,3063,3608,2194,3477,1951,3520,3255,2013,3805,1497,4055,1474,1358,1175,2665,1208,1539,1266,1783,2473,2394,976,2570,1606,2023,3064,1672,653,1649,1861,1480,1859,1057,1350,2112,828,670,1647,1803,2296,1697,1396],"marker":{"color":"#f4a259","line":{"color":"rgba(255,127,14,1)"}},"hovertemplate":["%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>","%{x}: %{y:,} fires<extra><\/extra>"],"type":"bar","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y2","frame":null}],"layout":{"xaxis":{"domain":[0,1],"automargin":true,"title":"","anchor":"y2"},"yaxis2":{"domain":[0,0.47999999999999998],"automargin":true,"title":"Number of fires","anchor":"x"},"yaxis":{"domain":[0.52000000000000002,1],"automargin":true,"title":"Area burned<br>(thousand ha)","anchor":"x"},"annotations":[],"shapes":[],"images":[],"margin":{"b":40,"l":70,"t":25,"r":10},"hovermode":"closest","showlegend":false},"attrs":{"705e5760d796":{"x":{},"y":{},"marker":{"color":"#b33a0e"},"hovertemplate":"%{x}: %{y:,.0f} thousand ha<extra><\/extra>","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"705e16e9e5ab":{"x":{},"y":{},"marker":{"color":"#f4a259"},"hovertemplate":"%{x}: %{y:,} fires<extra><\/extra>","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"subplot":true,"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="where-area-burned-has-grown" class="level2">
+<h2 class="anchored" data-anchor-id="where-area-burned-has-grown">Where area burned has grown</h2>
+<p>Mean area burned per season, by fire centre and decade. The colour scale is logarithmic, so each step is ten times larger than the last. Hover for the actual values.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-caf8bd6569debd75d42c" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-caf8bd6569debd75d42c">{"x":{"visdat":{"705e711fdf8a":["function () ","plotlyVisDat"]},"cur_data":"705e711fdf8a","attrs":{"705e711fdf8a":{"x":{},"y":{},"z":{},"customdata":{},"hovertemplate":"%{y} Fire Centre, %{x}<br>%{customdata:,.1f} thousand ha per season<extra><\/extra>","colorbar":{"title":"Hectares<br>per season","tickvals":[3,4,5,6],"ticktext":["1,000","10,000","100,000","1,000,000"]},"colors":["function (x) ","roundcolor(cbind(palette[[1L]](x), palette[[2L]](x), palette[[3L]](x), ","    if (alpha) palette[[4L]](x))) * 255"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"heatmap"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"","type":"category","categoryorder":"array","categoryarray":["1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","type":"category","categoryorder":"array","categoryarray":["Cariboo","Coastal","Kamloops","Northwest","Prince George","Southeast"]},"scene":{"zaxis":{"title":"log10(mean_annual_area_ha + 1)"}},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"colorbar":{"title":"Hectares<br>per season","ticklen":2,"tickvals":[3,4,5,6],"ticktext":["1,000","10,000","100,000","1,000,000"],"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"colorscale":[["0","rgba(251,233,215,1)"],["0.0416666666666667","rgba(250,221,194,1)"],["0.0833333333333333","rgba(249,209,173,1)"],["0.125","rgba(248,198,152,1)"],["0.166666666666667","rgba(246,186,131,1)"],["0.208333333333333","rgba(245,174,110,1)"],["0.25","rgba(244,162,89,1)"],["0.291666666666667","rgba(241,149,82,1)"],["0.333333333333333","rgba(239,137,75,1)"],["0.375","rgba(236,124,67,1)"],["0.416666666666667","rgba(233,112,60,1)"],["0.458333333333333","rgba(231,99,53,1)"],["0.5","rgba(228,87,46,1)"],["0.541666666666667","rgba(217,76,43,1)"],["0.583333333333333","rgba(207,65,39,1)"],["0.625","rgba(196,55,36,1)"],["0.666666666666667","rgba(185,44,33,1)"],["0.708333333333333","rgba(175,33,29,1)"],["0.75","rgba(164,22,26,1)"],["0.791666666666667","rgba(149,20,24,1)"],["0.833333333333333","rgba(134,18,21,1)"],["0.875","rgba(119,17,19,1)"],["0.916666666666667","rgba(104,15,16,1)"],["0.958333333333333","rgba(89,13,13,1)"],["1","rgba(74,11,11,1)"]],"showscale":true,"x":["1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s","1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s","1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s","1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s","1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s","1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s"],"y":["Cariboo","Cariboo","Cariboo","Cariboo","Cariboo","Cariboo","Cariboo","Cariboo","Coastal","Coastal","Coastal","Coastal","Coastal","Coastal","Coastal","Coastal","Kamloops","Kamloops","Kamloops","Kamloops","Kamloops","Kamloops","Kamloops","Kamloops","Northwest","Northwest","Northwest","Northwest","Northwest","Northwest","Northwest","Northwest","Prince George","Prince George","Prince George","Prince George","Prince George","Prince George","Prince George","Prince George","Southeast","Southeast","Southeast","Southeast","Southeast","Southeast","Southeast","Southeast"],"z":[4.1509068055554774,4.2619070503942478,3.587617811768276,3.42717439583503,2.9041527071713182,4.3282923279852978,5.0510161904898458,4.7571690784769602,3.9780361848006924,3.6404377071780298,3.2881284471827459,3.298486280992059,3.2792721588622076,2.947585649361097,4.3361818566097048,4.3560845244379136,3.7580303034863531,4.0024373570368921,3.8294838872616257,3.2471726418251019,3.7617497261368622,4.3289914662710549,4.4774357148161661,5.1131329157847194,4.5682856404333263,4.1878694264394243,4.0102270026113844,4.4504592744686411,3.9366248151727485,3.9939649981951191,5.0663625685779881,4.7471414874653277,5.0860655498793372,4.761227820004776,4.5583268955595333,4.7163210975167651,4.0999180917674112,4.4110276183918185,4.9362199917258893,5.9068789252500293,3.5209365871177414,3.8180555745426377,3.9232258794604626,3.8573910016080841,3.1165911421999133,4.0093556975339757,4.2724508170248248,4.5728793435660995],"customdata":[14.153900000000004,18.276090000000003,3.8681700000000028,2.6730799999999992,0.80096000000000001,21.294720000000012,112.46368999999986,57.169116666666667,9.5058399999999956,4.3685600000000004,1.9404600000000005,1.9873199999999993,1.90127,0.8853100000000006,21.685120000000001,22.702066666666667,5.7273599999999973,10.05528,6.7517999999999976,1.7657399999999999,5.7766299999999973,21.329029999999999,30.020729999999979,129.75663333333327,37.006150000000005,15.411370000000002,10.237279999999995,28.212650000000004,8.6412099999999992,9.8610000000000007,116.50882999999992,55.864216666666678,121.91636000000004,57.705909999999939,36.167199999999994,52.037059999999975,12.585880000000007,25.763850000000009,86.340580000000031,807.00901666666607,3.3174600000000014,6.5764200000000024,8.3786500000000039,7.1999700000000031,1.3069500000000005,10.216759999999997,18.725249999999999,37.399666666666661],"hovertemplate":"%{y} Fire Centre, %{x}<br>%{customdata:,.1f} thousand ha per season<extra><\/extra>","type":"heatmap","xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>The 2020s cover six seasons (2020 to 2025), and their averages are calculated over six seasons, not ten.</p>
+</section>
+<section id="lightning-versus-people" class="level2">
+<h2 class="anchored" data-anchor-id="lightning-versus-people">Lightning versus people</h2>
+<p>Lightning and people start similar numbers of fires, but lightning fires account for most of the area burned. They tend to start in remote areas, where they can grow large before they are reached.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-db5a88f6d956c8e982d1" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-db5a88f6d956c8e982d1">{"x":{"visdat":{"705e2f556ff6":["function () ","plotlyVisDat"]},"cur_data":"705e2f556ff6","attrs":{"705e2f556ff6":{"y":{},"x":{},"orientation":"h","hovertemplate":"%{y}: %{x:.1f}%<extra><\/extra>","color":{},"colors":["#f4a259","#b33a0e"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","xaxis":{"domain":[0,1],"automargin":true,"title":"","ticksuffix":"%"},"yaxis":{"domain":[0,1],"automargin":true,"title":"","categoryorder":"array","categoryarray":["Unknown","Person","Lightning"],"type":"category"},"legend":{"orientation":"h","y":-0.14999999999999999},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"y":["Lightning","Person","Unknown"],"x":[76.562985288054179,22.77640059239944,0.66061411954636795],"orientation":"h","hovertemplate":["%{y}: %{x:.1f}%<extra><\/extra>","%{y}: %{x:.1f}%<extra><\/extra>","%{y}: %{x:.1f}%<extra><\/extra>"],"type":"bar","name":"Share of area burned","marker":{"color":"rgba(179,58,14,1)","line":{"color":"rgba(179,58,14,1)"}},"textfont":{"color":"rgba(179,58,14,1)"},"error_y":{"color":"rgba(179,58,14,1)"},"error_x":{"color":"rgba(179,58,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":["Lightning","Person","Unknown"],"x":[47.939651649811012,44.836678925324343,7.223669424864644],"orientation":"h","hovertemplate":["%{y}: %{x:.1f}%<extra><\/extra>","%{y}: %{x:.1f}%<extra><\/extra>","%{y}: %{x:.1f}%<extra><\/extra>"],"type":"bar","name":"Share of fires","marker":{"color":"rgba(244,162,89,1)","line":{"color":"rgba(244,162,89,1)"}},"textfont":{"color":"rgba(244,162,89,1)"},"error_y":{"color":"rgba(244,162,89,1)"},"error_x":{"color":"rgba(244,162,89,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="fire-near-communities" class="level2">
+<h2 class="anchored" data-anchor-id="fire-near-communities">Fire near communities</h2>
+<p>Total area burned within 50 km of five BC communities, by decade. BigQuery GIS clipped each fire perimeter to a 50 km buffer around each community, so only the nearby burned area is counted. The 2020s total covers six seasons only.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-2bb1f1bcc1c7217775a0" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-2bb1f1bcc1c7217775a0">{"x":{"visdat":{"705e73432f8f":["function () ","plotlyVisDat"]},"cur_data":"705e73432f8f","attrs":{"705e73432f8f":{"x":{},"y":{},"mode":"lines+markers","hovertemplate":"%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","color":{},"colors":["#1c1310","#b33a0e","#f4a259","#7a8b99","#2a6f97"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"","type":"category","categoryorder":"array","categoryarray":["1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Area burned within 50 km<br>(thousand ha)"},"legend":{"orientation":"h","y":-0.14999999999999999},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":["1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s"],"y":[128.86185247363821,36.781603413469668,26.513392843608731,10.371722485818362,2.3505266024103872,1.0384912800741137,32.360576169269102,34.746517844494988],"mode":"lines+markers","hovertemplate":["%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>"],"type":"scatter","name":"Fort St. John","marker":{"color":"rgba(28,19,16,1)","line":{"color":"rgba(28,19,16,1)"}},"textfont":{"color":"rgba(28,19,16,1)"},"error_y":{"color":"rgba(28,19,16,1)"},"error_x":{"color":"rgba(28,19,16,1)"},"line":{"color":"rgba(28,19,16,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s"],"y":[5.4155678668834808,6.8484186991068805,1.6785084252237075,1.1348590389369033,6.2683484980111386,29.531518544567568,2.5552791551289884,108.68022476653236],"mode":"lines+markers","hovertemplate":["%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>"],"type":"scatter","name":"Kamloops","marker":{"color":"rgba(179,58,14,1)","line":{"color":"rgba(179,58,14,1)"}},"textfont":{"color":"rgba(179,58,14,1)"},"error_y":{"color":"rgba(179,58,14,1)"},"error_x":{"color":"rgba(179,58,14,1)"},"line":{"color":"rgba(179,58,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s"],"y":[0.87709068315114069,2.9237857389060911,9.8903030483563192,1.4812435938376112,5.6093971347589875,35.285809307504202,8.6556331795927886,57.545388910909381],"mode":"lines+markers","hovertemplate":["%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>"],"type":"scatter","name":"Kelowna","marker":{"color":"rgba(244,162,89,1)","line":{"color":"rgba(244,162,89,1)"}},"textfont":{"color":"rgba(244,162,89,1)"},"error_y":{"color":"rgba(244,162,89,1)"},"error_x":{"color":"rgba(244,162,89,1)"},"line":{"color":"rgba(244,162,89,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s"],"y":[4.2740861440683924,26.227187701135634,2.1575672506504668,0.78424007851152966,2.5147447006905139,0.099897083901449718,4.0478501007869729,0.20451402984951578],"mode":"lines+markers","hovertemplate":["%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>"],"type":"scatter","name":"Prince George","marker":{"color":"rgba(122,139,153,1)","line":{"color":"rgba(122,139,153,1)"}},"textfont":{"color":"rgba(122,139,153,1)"},"error_y":{"color":"rgba(122,139,153,1)"},"error_x":{"color":"rgba(122,139,153,1)"},"line":{"color":"rgba(122,139,153,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s"],"y":[5.8647061339911195,3.604660448314235,1.6438766793476429,2.2680852909105993,0.27865235192337429,2.7199655869216843,139.73367340806465,0.35341567595748241],"mode":"lines+markers","hovertemplate":["%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>","%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}<\/extra>"],"type":"scatter","name":"Williams Lake","marker":{"color":"rgba(42,111,151,1)","line":{"color":"rgba(42,111,151,1)"}},"textfont":{"color":"rgba(42,111,151,1)"},"error_y":{"color":"rgba(42,111,151,1)"},"error_x":{"color":"rgba(42,111,151,1)"},"line":{"color":"rgba(42,111,151,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Areas that burned more than once are counted each time.</p>
+</section>
+<section id="the-15-largest-fires-since-1950" class="level2">
+<h2 class="anchored" data-anchor-id="the-15-largest-fires-since-1950">The 15 largest fires since 1950</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 4%">
+<col style="width: 49%">
+<col style="width: 11%">
+<col style="width: 13%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Year</th>
+<th style="text-align: left;">Fire</th>
+<th style="text-align: left;">Fire number</th>
+<th style="text-align: left;">Fire centre</th>
+<th style="text-align: right;">Cause</th>
+<th style="text-align: left;">Size (ha)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2023</td>
+<td style="text-align: left;">2023 Holdover G90288</td>
+<td style="text-align: left;">G90288</td>
+<td style="text-align: left;">Prince George</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">768,915</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2023</td>
+<td style="text-align: left;">2023 Holdover DONNIE CREEK</td>
+<td style="text-align: left;">G80280</td>
+<td style="text-align: left;">Prince George</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">619,072</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017</td>
+<td style="text-align: left;">C10784</td>
+<td style="text-align: left;">C10784</td>
+<td style="text-align: left;">Cariboo</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">520,885</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2024</td>
+<td style="text-align: left;">Nogah Creek</td>
+<td style="text-align: left;">G90228</td>
+<td style="text-align: left;">Prince George</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">508,473</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2023</td>
+<td style="text-align: left;">2023 Holdover G90628</td>
+<td style="text-align: left;">G90628</td>
+<td style="text-align: left;">Prince George</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">477,723</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2025</td>
+<td style="text-align: left;">G90216</td>
+<td style="text-align: left;">G90216</td>
+<td style="text-align: left;">Prince George</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">280,461</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2023</td>
+<td style="text-align: left;">2023 Holdover Ekwan Tower</td>
+<td style="text-align: left;">G92498</td>
+<td style="text-align: left;">Prince George</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">275,175</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1958</td>
+<td style="text-align: left;">G00117</td>
+<td style="text-align: left;">G00117</td>
+<td style="text-align: left;">Prince George</td>
+<td style="text-align: right;">Person</td>
+<td style="text-align: left;">244,026</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2017</td>
+<td style="text-align: left;">Hanceville-Riske Creek-C50647-Chilcotin Fire Zone</td>
+<td style="text-align: left;">C50647</td>
+<td style="text-align: left;">Cariboo</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">239,340</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017</td>
+<td style="text-align: left;">Elephant Hill</td>
+<td style="text-align: left;">K20637</td>
+<td style="text-align: left;">Kamloops</td>
+<td style="text-align: right;">Person</td>
+<td style="text-align: left;">192,016</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2023</td>
+<td style="text-align: left;">2023 Holdover Big Creek</td>
+<td style="text-align: left;">G60666</td>
+<td style="text-align: left;">Prince George</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">176,539</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2023</td>
+<td style="text-align: left;">G90207</td>
+<td style="text-align: left;">G90207</td>
+<td style="text-align: left;">Prince George</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">170,937</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1982</td>
+<td style="text-align: left;">R90015</td>
+<td style="text-align: left;">R90015</td>
+<td style="text-align: left;">Northwest</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">166,698</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2018</td>
+<td style="text-align: left;">R92132</td>
+<td style="text-align: left;">R92132</td>
+<td style="text-align: left;">Northwest</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">156,775</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2025</td>
+<td style="text-align: left;">Pocket Knife Creek</td>
+<td style="text-align: left;">G80352</td>
+<td style="text-align: left;">Prince George</td>
+<td style="text-align: right;">Lightning</td>
+<td style="text-align: left;">149,505</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>“Holdover” fires started in one season, smouldered over winter, and flared up again the next year.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/emmabranch\.github\.io\/bc-wildfire-bigquery\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Portfolio project by Emma Branch. Data: BC Wildfire Service via the BC Data Catalogue. Not an official BC Wildfire Service product.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

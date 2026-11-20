@@ -1,0 +1,42 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - index.qmd
+    - explore.qmd
+    - methods.qmd
+    - about.qmd
+  resources:
+    - figures/*.png
+    - results/*
+
+website:
+  title: "BC wildfire history"
+  site-url: https://emmabranch.github.io/bc-wildfire-bigquery/
+  repo-url: https://github.com/emmabranch/bc-wildfire-bigquery
+  navbar:
+    left:
+      - href: index.qmd
+        text: Overview
+      - href: explore.qmd
+        text: Explore
+      - href: methods.qmd
+        text: Methods and SQL
+      - href: about.qmd
+        text: About
+    right:
+      - icon: github
+        href: https://github.com/emmabranch/bc-wildfire-bigquery
+  page-footer:
+    center: "Portfolio project by Emma Branch. Data: BC Wildfire Service via the BC Data Catalogue. Not an official BC Wildfire Service product."
+
+format:
+  html:
+    theme: [flatly, theme.scss]
+    toc: false
+
+execute:
+  echo: false
+  warning: false
+  message: false
+  freeze: auto

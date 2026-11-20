@@ -1,0 +1,156 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "I built this project to get hands-on experience with Google BigQuery and BigQuery GIS, using a dataset I care about. My PhD research looks at wildfire smoke exposure and perinatal and infant health in British Columbia, so I wanted to understand the fire record behind the smoke.\nThe project covers a full, small-scale cloud data workflow:\n\nextracting open government data in R\nloading it into BigQuery\ncleaning and checking it with SQL\nrunning spatial queries with BigQuery GIS\nquerying BigQuery from R to build the charts and maps on this site\n\nThe Methods and SQL page documents every step, including the problems I ran into and how I handled them.\nThis is an independent portfolio project. It is not affiliated with or endorsed by the BC Wildfire Service or the Government of British Columbia."
+  },
+  {
+    "objectID": "about.html#about-this-project",
+    "href": "about.html#about-this-project",
+    "title": "About",
+    "section": "",
+    "text": "I built this project to get hands-on experience with Google BigQuery and BigQuery GIS, using a dataset I care about. My PhD research looks at wildfire smoke exposure and perinatal and infant health in British Columbia, so I wanted to understand the fire record behind the smoke.\nThe project covers a full, small-scale cloud data workflow:\n\nextracting open government data in R\nloading it into BigQuery\ncleaning and checking it with SQL\nrunning spatial queries with BigQuery GIS\nquerying BigQuery from R to build the charts and maps on this site\n\nThe Methods and SQL page documents every step, including the problems I ran into and how I handled them.\nThis is an independent portfolio project. It is not affiliated with or endorsed by the BC Wildfire Service or the Government of British Columbia."
+  },
+  {
+    "objectID": "about.html#about-me",
+    "href": "about.html#about-me",
+    "title": "About",
+    "section": "About me",
+    "text": "About me\nI’m Emma Branch, an epidemiologist and population health researcher, and a PhD candidate in epidemiology at the University of British Columbia. I like turning complex data into clear evidence that people can act on."
+  },
+  {
+    "objectID": "about.html#other-projects",
+    "href": "about.html#other-projects",
+    "title": "About",
+    "section": "Other projects",
+    "text": "Other projects\n\nClimate resilience and equity profile of VCH communities: social vulnerability to heat and wildfire smoke, mapped alongside green cover\nBC fish stock status: an exploratory rapid assessment toolkit for ten BC fish stocks\nBC housing indicators: an indicator framework and scorecard for 40 BC municipalities\nBC lightstation sea temperature QC: quality-controlling CIOOS ocean data and mapping the 2014 to 2016 marine heatwave\nREDCap starter kit: a REDCap data pipeline with quality checks and reporting\nBC Salmon Explorer: an R Shiny app mapping nearly 7,000 salmon spawning streams\n\nMore on GitHub."
+  },
+  {
+    "objectID": "about.html#get-in-touch",
+    "href": "about.html#get-in-touch",
+    "title": "About",
+    "section": "Get in touch",
+    "text": "Get in touch\n\nLinkedIn\nemma.branch@gmail.com"
+  },
+  {
+    "objectID": "explore.html",
+    "href": "explore.html",
+    "title": "Explore the data",
+    "section": "",
+    "text": "The top panel shows area burned and the bottom panel shows the number of fires. Recent seasons stand out in the top panel but not in the bottom one."
+  },
+  {
+    "objectID": "explore.html#fire-seasons-year-by-year",
+    "href": "explore.html#fire-seasons-year-by-year",
+    "title": "Explore the data",
+    "section": "",
+    "text": "The top panel shows area burned and the bottom panel shows the number of fires. Recent seasons stand out in the top panel but not in the bottom one."
+  },
+  {
+    "objectID": "explore.html#where-area-burned-has-grown",
+    "href": "explore.html#where-area-burned-has-grown",
+    "title": "Explore the data",
+    "section": "Where area burned has grown",
+    "text": "Where area burned has grown\nMean area burned per season, by fire centre and decade. The colour scale is logarithmic, so each step is ten times larger than the last. Hover for the actual values.\n\n\n\n\n\n\nThe 2020s cover six seasons (2020 to 2025), and their averages are calculated over six seasons, not ten."
+  },
+  {
+    "objectID": "explore.html#lightning-versus-people",
+    "href": "explore.html#lightning-versus-people",
+    "title": "Explore the data",
+    "section": "Lightning versus people",
+    "text": "Lightning versus people\nLightning and people start similar numbers of fires, but lightning fires account for most of the area burned. They tend to start in remote areas, where they can grow large before they are reached."
+  },
+  {
+    "objectID": "explore.html#fire-near-communities",
+    "href": "explore.html#fire-near-communities",
+    "title": "Explore the data",
+    "section": "Fire near communities",
+    "text": "Fire near communities\nTotal area burned within 50 km of five BC communities, by decade. BigQuery GIS clipped each fire perimeter to a 50 km buffer around each community, so only the nearby burned area is counted. The 2020s total covers six seasons only.\n\n\n\n\n\n\nAreas that burned more than once are counted each time."
+  },
+  {
+    "objectID": "explore.html#the-15-largest-fires-since-1950",
+    "href": "explore.html#the-15-largest-fires-since-1950",
+    "title": "Explore the data",
+    "section": "The 15 largest fires since 1950",
+    "text": "The 15 largest fires since 1950\n\n\n\n\n\n\n\n\n\n\n\n\n\nYear\nFire\nFire number\nFire centre\nCause\nSize (ha)\n\n\n\n\n2023\n2023 Holdover G90288\nG90288\nPrince George\nLightning\n768,915\n\n\n2023\n2023 Holdover DONNIE CREEK\nG80280\nPrince George\nLightning\n619,072\n\n\n2017\nC10784\nC10784\nCariboo\nLightning\n520,885\n\n\n2024\nNogah Creek\nG90228\nPrince George\nLightning\n508,473\n\n\n2023\n2023 Holdover G90628\nG90628\nPrince George\nLightning\n477,723\n\n\n2025\nG90216\nG90216\nPrince George\nLightning\n280,461\n\n\n2023\n2023 Holdover Ekwan Tower\nG92498\nPrince George\nLightning\n275,175\n\n\n1958\nG00117\nG00117\nPrince George\nPerson\n244,026\n\n\n2017\nHanceville-Riske Creek-C50647-Chilcotin Fire Zone\nC50647\nCariboo\nLightning\n239,340\n\n\n2017\nElephant Hill\nK20637\nKamloops\nPerson\n192,016\n\n\n2023\n2023 Holdover Big Creek\nG60666\nPrince George\nLightning\n176,539\n\n\n2023\nG90207\nG90207\nPrince George\nLightning\n170,937\n\n\n1982\nR90015\nR90015\nNorthwest\nLightning\n166,698\n\n\n2018\nR92132\nR92132\nNorthwest\nLightning\n156,775\n\n\n2025\nPocket Knife Creek\nG80352\nPrince George\nLightning\n149,505\n\n\n\n\n\n“Holdover” fires started in one season, smouldered over winter, and flared up again the next year."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Fewer fires. Far more burned.",
+    "section": "",
+    "text": "Portfolio project · Google BigQuery · BigQuery GIS · R\n\n\n75 years of BC Wildfire Service records, loaded into Google BigQuery and analysed with SQL and BigQuery GIS. The number of fires each season hasn’t gone up, but the area they burn has.\nExplore the data How it was built Code on GitHub\nBanner: one stripe per fire season, 1950 to 2025. Brighter stripes mean more area burned."
+  },
+  {
+    "objectID": "index.html#where-the-largest-fires-burned",
+    "href": "index.html#where-the-largest-fires-burned",
+    "title": "Fewer fires. Far more burned.",
+    "section": "Where the largest fires burned",
+    "text": "Where the largest fires burned\nEvery fire of 10,000 hectares or more from 1950 to 2025 (255 fires), coloured by decade. Click a fire for its details, or use the layer menu (top right) to show or hide decades. Dashed circles mark 50 km around five communities used in the spatial analysis."
+  },
+  {
+    "objectID": "index.html#what-the-data-show",
+    "href": "index.html#what-the-data-show",
+    "title": "Fewer fires. Far more burned.",
+    "section": "What the data show",
+    "text": "What the data show\n\nArea burned has risen sharply while the number of fires has not. Annual fire counts since 2020 are within or below the historical range, but the average area burned each year is many times higher than in earlier decades.\n2023 was an extreme outlier. About 3.86M hectares burned, nearly three times the next largest seasons, 2018 and 2017.\nLightning drives most of the area burned. Lightning caused about half of all fires but 77% of area burned.\nArea burned is concentrated in the north. The Prince George Fire Centre accounts for over half of all area burned since 1950.\nArea burned near communities has increased. Within 50 km of Kamloops, more land burned from 2020 to 2025 than in any earlier decade.\n\n\nThis is an independent portfolio project using open BC Wildfire Service data. It is not an official BC Wildfire Service product, and it is not intended for legal, planning, or insurance decisions. See Methods and SQL for data sources, cleaning steps, and limitations."
+  },
+  {
+    "objectID": "methods.html",
+    "href": "methods.html",
+    "title": "Methods and SQL",
+    "section": "",
+    "text": "1. Extract (R) Downloaded two BC Data Catalogue layers with bcdata, one fire season at a time.\n\n\n2. Prepare (R) Harmonised column types, repaired and simplified shapes, and exported CSVs with geometry as WKT text.\n\n\n3. Load (BigQuery) Uploaded both files to a BigQuery sandbox dataset, with an explicit schema for the incidents.\n\n\n4. Transform and check (SQL) Built GEOGRAPHY columns, cleaned dates, and ran data quality checks.\n\n\n5. Analyse and share (SQL, R) Summarised by year, fire centre, and cause, ran a spatial query, and pulled the results into R with bigrquery.\n\n\nAll the code is in the GitHub repository: R scripts in R/ and SQL in sql/."
+  },
+  {
+    "objectID": "methods.html#the-pipeline",
+    "href": "methods.html#the-pipeline",
+    "title": "Methods and SQL",
+    "section": "",
+    "text": "1. Extract (R) Downloaded two BC Data Catalogue layers with bcdata, one fire season at a time.\n\n\n2. Prepare (R) Harmonised column types, repaired and simplified shapes, and exported CSVs with geometry as WKT text.\n\n\n3. Load (BigQuery) Uploaded both files to a BigQuery sandbox dataset, with an explicit schema for the incidents.\n\n\n4. Transform and check (SQL) Built GEOGRAPHY columns, cleaned dates, and ran data quality checks.\n\n\n5. Analyse and share (SQL, R) Summarised by year, fire centre, and cause, ran a spatial query, and pulled the results into R with bigrquery.\n\n\nAll the code is in the GitHub repository: R scripts in R/ and SQL in sql/."
+  },
+  {
+    "objectID": "methods.html#data",
+    "href": "methods.html#data",
+    "title": "Methods and SQL",
+    "section": "Data",
+    "text": "Data\n\n\n\nDataset\nWhat it contains\nRecords\n\n\n\n\nBC Wildfire Fire Incident Locations - Historical\nOne point per incident tracked by BC Wildfire Service, with year, cause, fire centre, and dates\n200,479\n\n\nBC Wildfire Fire Perimeters - Historical\nMapped fire perimeter polygons, with size in hectares\n24,751\n\n\n\nBoth datasets are published by the Government of British Columbia (BC Wildfire Service) through the BC Data Catalogue, and were accessed in November 2026. They are not intended for legal purposes."
+  },
+  {
+    "objectID": "methods.html#problems-found-and-how-they-were-handled",
+    "href": "methods.html#problems-found-and-how-they-were-handled",
+    "title": "Methods and SQL",
+    "section": "Problems found, and how they were handled",
+    "text": "Problems found, and how they were handled\n\nLarge downloads failed. Requesting all 200,479 incidents at once failed partway through, so the download was split into one request per fire season, with automatic retries.\nColumn types changed between years. For example, VERSION_NUMBER is text in some years and a number in others. Mixed columns were converted to text before combining.\nImpossible dates. BigQuery rejected three rows on load because of ignition dates with years such as 223 and 915. The incidents were reloaded with dates as text, then parsed in SQL with SAFE.PARSE_DATE. In total, five dates before 1900 were set to missing. Annual summaries use FIRE_YEAR, so they are not affected.\nNon-fire incidents. Only 156,624 of the 200,479 incidents are true fires. The rest are nuisance fires, smoke chases, duplicates, and other incident types. Fire counts use FIRE_TYPE = 'Fire' only."
+  },
+  {
+    "objectID": "methods.html#data-quality-checks",
+    "href": "methods.html#data-quality-checks",
+    "title": "Methods and SQL",
+    "section": "Data quality checks",
+    "text": "Data quality checks\n\nGeometry: all 200,479 points and 24,751 perimeters produced valid BigQuery geographies.\nArea: for the largest fires, area calculated from the polygons with ST_AREA was within about 0.5% of the recorded size. That is consistent with simplifying the shapes to 50 m.\nFire centre: derived from the first letter of the fire number, and cross-checked against the FIRE_CENTRE code. Each letter matched exactly one code for all 156,624 fires."
+  },
+  {
+    "objectID": "methods.html#key-sql",
+    "href": "methods.html#key-sql",
+    "title": "Methods and SQL",
+    "section": "Key SQL",
+    "text": "Key SQL\n\nBuilding geography columns\n-- Points: build a geography from longitude and latitude\nCREATE OR REPLACE TABLE `bc-wildfire-bigquery.bc_wildfire.incidents` AS\nSELECT\n  * EXCEPT (IGNITION_DATE, FIRE_OUT_DATE),\n  IF(SAFE.PARSE_DATE('%Y-%m-%d', IGNITION_DATE) &gt;= DATE '1900-01-01',\n     SAFE.PARSE_DATE('%Y-%m-%d', IGNITION_DATE), NULL) AS IGNITION_DATE,\n  IF(SAFE.PARSE_DATE('%Y-%m-%d', FIRE_OUT_DATE) &gt;= DATE '1900-01-01',\n     SAFE.PARSE_DATE('%Y-%m-%d', FIRE_OUT_DATE), NULL) AS FIRE_OUT_DATE,\n  ST_GEOGPOINT(LONGITUDE, LATITUDE) AS geog\nFROM `bc-wildfire-bigquery.bc_wildfire.fire_incidents_raw`;\n\n-- Polygons: parse WKT text, repairing minor geometry problems\nCREATE OR REPLACE TABLE `bc-wildfire-bigquery.bc_wildfire.perimeters` AS\nSELECT\n  * EXCEPT (geometry_wkt),\n  SAFE.ST_GEOGFROMTEXT(geometry_wkt, make_valid =&gt; TRUE) AS geog\nFROM `bc-wildfire-bigquery.bc_wildfire.fire_perimeters_raw`;\n\n\nArea burned within 50 km of communities\n-- ST_DWITHIN finds perimeters within 50 km; ST_INTERSECTION clips each\n-- perimeter to a 50 km buffer so only the nearby burned area is counted.\nWITH communities AS (\n  SELECT name, ST_GEOGPOINT(lon, lat) AS pt\n  FROM UNNEST([\n    STRUCT('Kamloops' AS name, -120.327 AS lon, 50.675 AS lat),\n    ('Kelowna', -119.496, 49.888),\n    ('Prince George', -122.749, 53.917),\n    ('Williams Lake', -122.141, 52.141),\n    ('Fort St. John', -120.846, 56.252)\n  ])\n)\nSELECT\n  c.name AS community,\n  DIV(p.FIRE_YEAR, 10) * 10 AS decade,\n  COUNT(*) AS n_fires_within_50km,\n  SUM(ST_AREA(ST_INTERSECTION(p.geog, ST_BUFFER(c.pt, 50000)))) / 10000\n    AS area_burned_within_50km_ha\nFROM communities AS c\nJOIN `bc-wildfire-bigquery.bc_wildfire.perimeters` AS p\n  ON ST_DWITHIN(p.geog, c.pt, 50000)\nWHERE p.FIRE_YEAR BETWEEN 1950 AND 2025\nGROUP BY community, decade\nORDER BY community, decade;\n\n\nPreparing shapes for the web map\n-- One row per large fire, with shapes simplified to 250 m in BigQuery\n-- so the web map stays fast\nSELECT\n  p.FIRE_YEAR, p.FIRE_NUMBER, i.INCIDENT_NAME, p.FIRE_SIZE_HECTARES,\n  ST_ASTEXT(ST_SIMPLIFY(p.geog, 250)) AS wkt\nFROM `bc-wildfire-bigquery.bc_wildfire.perimeters` AS p\nLEFT JOIN `bc-wildfire-bigquery.bc_wildfire.incidents` AS i\n  ON i.FIRE_NUMBER = p.FIRE_NUMBER\n AND i.FIRE_YEAR = p.FIRE_YEAR\n AND i.FIRE_TYPE = 'Fire'\nWHERE p.FIRE_SIZE_HECTARES &gt;= 10000\nQUALIFY ROW_NUMBER() OVER (\n  PARTITION BY p.FIRE_NUMBER, p.FIRE_YEAR ORDER BY i.IGNITION_DATE\n) = 1;\nThe full set of queries is in sql/. Each analysis query processed between about 14 and 31 MB, well within the BigQuery sandbox’s free monthly allowance."
+  },
+  {
+    "objectID": "methods.html#why-the-results-are-saved-as-files",
+    "href": "methods.html#why-the-results-are-saved-as-files",
+    "title": "Methods and SQL",
+    "section": "Why the results are saved as files",
+    "text": "Why the results are saved as files\nBigQuery sandbox tables expire after 60 days. The analysis was run once in BigQuery, and the results were saved to the repository (R/03_export_results.R), so this site keeps working after the cloud tables expire. The full pipeline can be rerun from the scripts."
+  },
+  {
+    "objectID": "methods.html#limitations",
+    "href": "methods.html#limitations",
+    "title": "Methods and SQL",
+    "section": "Limitations",
+    "text": "Limitations\n\nPerimeter mapping has changed over time. Before about 2006, few small fires were mapped, so fire counts come from incident points. Area totals are dominated by large fires, which were mapped throughout, but early totals may be slightly underestimated.\nHoldover fires. Some fires overwinter and are recorded again the next season under a new number, so some area may be counted in more than one season.\nReburns. Area that burned more than once is counted each time, including in the 50 km community totals.\nSimplified shapes. Perimeters were simplified to 50 m for analysis and 250 m for the map. That is fine for provincial summaries, but not for property-level work.\nDescriptive only. No adjustment is made for changes in detection, suppression policy, reporting, or climate."
+  }
+]
