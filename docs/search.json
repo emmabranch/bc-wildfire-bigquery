@@ -81,7 +81,7 @@
     "href": "index.html",
     "title": "Fewer fires. Far more burned.",
     "section": "",
-    "text": "Portfolio project · Google BigQuery · BigQuery GIS · R\n\n\n75 years of BC Wildfire Service records, loaded into Google BigQuery and analysed with SQL and BigQuery GIS. The number of fires each season hasn’t gone up, but the area they burn has.\nExplore the data How it was built Code on GitHub\nBanner: one stripe per fire season, 1950 to 2025. Brighter stripes mean more area burned."
+    "text": "Portfolio project · Google BigQuery · BigQuery GIS · R\n\n\n76 fire seasons of BC Wildfire Service records, loaded into Google BigQuery and analysed with SQL and BigQuery GIS. The number of fires each season hasn’t gone up, but the area they burn has.\nExplore the data How it was built Code on GitHub\nBanner: one stripe per fire season, 1950 to 2025. Brighter stripes mean more area burned."
   },
   {
     "objectID": "index.html#where-the-largest-fires-burned",

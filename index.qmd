@@ -38,7 +38,7 @@ mha <- function(x) paste0(number(x / 1e6, accuracy = 0.01), "M")
 
 # Fewer fires. [Far more burned.]{.accent}
 
-75 years of BC Wildfire Service records, loaded into Google BigQuery and analysed with SQL and BigQuery GIS. The number of fires each season hasn't gone up, but the area they burn has.
+76 fire seasons of BC Wildfire Service records, loaded into Google BigQuery and analysed with SQL and BigQuery GIS. The number of fires each season hasn't gone up, but the area they burn has.
 
 [Explore the data](explore.qmd){.btn .btn-accent} [How it was built](methods.qmd){.btn .btn-ghost} [Code on GitHub](https://github.com/emmabranch/bc-wildfire-bigquery){.btn .btn-ghost}
 

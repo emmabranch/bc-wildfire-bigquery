@@ -1,6 +1,6 @@
 # BC wildfire history in BigQuery
 
-An analysis of 75 years of British Columbia wildfire records (1950 to 2025) using **Google BigQuery** and **BigQuery GIS**, with results pulled into R for visualisation.
+An analysis of 76 fire seasons of British Columbia wildfire records (1950 to 2025) using **Google BigQuery** and **BigQuery GIS**, with results pulled into R for visualisation.
 
 **Live site:** [emmabranch.github.io/bc-wildfire-bigquery](https://emmabranch.github.io/bc-wildfire-bigquery/)
 
@@ -90,11 +90,16 @@ The project loads BC Wildfire Service fire incident points and fire perimeter po
 bc-wildfire-bigquery/
 ├── R/
 │   ├── 01_download_data.R     # extract from BC Data Catalogue, write CSVs
-│   └── 02_figures.R           # query BigQuery from R, make figures
+│   ├── 02_figures.R           # query BigQuery from R, make figures
+│   ├── 03_export_results.R    # save query results to results/, so the site outlives the sandbox
+│   └── 04_banner.R            # banner stripes for the website
 ├── sql/
 │   ├── 01_create_tables.sql   # build tables, GEOGRAPHY columns, quality checks
 │   └── 02_analysis.sql        # summaries by year, fire centre, cause; GIS query
+├── results/                   # saved query results used by the website
 ├── figures/
+├── index.qmd, explore.qmd, methods.qmd, about.qmd   # website pages (Quarto)
+├── docs/                      # rendered website, served by GitHub Pages
 └── README.md
 ```
 
@@ -109,8 +114,10 @@ bc-wildfire-bigquery/
      ```
 4. Run `sql/01_create_tables.sql`, then `sql/02_analysis.sql`, in the BigQuery console. Replace the project ID if yours differs.
 5. Run `R/02_figures.R`.
+6. Run `R/03_export_results.R` to save the query results to `results/`.
+7. Run `R/04_banner.R`, then `quarto render` to build the website into `docs/`.
 
-Note: BigQuery sandbox tables expire after 60 days, so this repository holds the full pipeline rather than relying on the cloud tables persisting.
+Note: BigQuery sandbox tables expire after 60 days, so this repository holds the full pipeline and the saved results rather than relying on the cloud tables persisting.
 
 ## Tools
 
