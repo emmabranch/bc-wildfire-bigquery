@@ -31,6 +31,7 @@ I'm Emma Branch, an epidemiologist and data analyst in British Columbia, and a P
 - [REDCap starter kit](https://emmabranch.github.io/redcap-starter-kit/): a REDCap data pipeline with quality checks and reporting
 - [BC Salmon Explorer](https://emmabranch.shinyapps.io/bc-salmon-explorer): an R Shiny app mapping nearly 7,000 salmon spawning streams
 - [Mining claims and caribou ranges in Ontario](https://emmabranch.github.io/ontario-claims-caribou/): how much of Ontario's woodland caribou range is under active mining claims
+- [Whales of the Salish Sea](https://emmabranch.github.io/salish-sea-whales/): more whales, or more watchers? An interactive story about whale sightings
 
 More on [GitHub](https://github.com/emmabranch).
 
