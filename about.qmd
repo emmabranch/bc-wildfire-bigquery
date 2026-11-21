@@ -20,7 +20,7 @@ This is an independent portfolio project. It is not affiliated with or endorsed 
 
 ## About me
 
-I'm Emma Branch, an epidemiologist and population health researcher, and a PhD candidate in epidemiology at the University of British Columbia. I like turning complex data into clear evidence that people can act on.
+I'm Emma Branch, an epidemiologist and data analyst in British Columbia, and a PhD candidate in Population and Public Health at the University of British Columbia. I've spent about 10 years working with health research data, including registry analytics, REDCap database design, data governance, and performance measurement. I mostly work in R, SAS, and SQL, and build reports and tools with Quarto, Shiny, leaflet, and Power BI. Lately I've been applying the same habits to environmental and ocean data, mostly because I like maps and fish.
 
 ## Other projects
 
@@ -30,6 +30,7 @@ I'm Emma Branch, an epidemiologist and population health researcher, and a PhD c
 - [BC lightstation sea temperature QC](https://emmabranch.github.io/bc-lightstation-qc/): quality-controlling CIOOS ocean data and mapping the 2014 to 2016 marine heatwave
 - [REDCap starter kit](https://emmabranch.github.io/redcap-starter-kit/): a REDCap data pipeline with quality checks and reporting
 - [BC Salmon Explorer](https://emmabranch.shinyapps.io/bc-salmon-explorer): an R Shiny app mapping nearly 7,000 salmon spawning streams
+- [Mining claims and caribou ranges in Ontario](https://emmabranch.github.io/ontario-claims-caribou/): how much of Ontario's woodland caribou range is under active mining claims
 
 More on [GitHub](https://github.com/emmabranch).
 
