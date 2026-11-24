@@ -58,6 +58,8 @@ main h2 {
   background: linear-gradient(var(--eb-accent), var(--eb-accent)) no-repeat left bottom / 56px 6px;
 }
 main h3 { font-size: 1.35rem; line-height: 1.2; }
+/* No link icons next to headings (Quarto adds them; they just confuse people) */
+.anchorjs-link { display: none !important; }
 .eyebrow, .mono { font-family: "Space Mono", monospace; }
 
 /* ---------- Links and focus ---------- */
@@ -199,6 +201,10 @@ main.content:has(.hero-full) > #title-block-header { margin: 0 !important; }
   padding: 14px;
   box-shadow: 5px 5px 0 var(--eb-accent-light);
   transform: rotate(-6deg);
+}
+/* Keep long headlines clear of the badge on wider screens */
+@media (min-width: 701px) {
+  .hero-full:has(.hero-motif) .hero-inner { padding-right: clamp(2rem, 12vw, 10rem); }
 }
 @media (max-width: 700px) {
   .hero-motif { width: 64px; padding: 9px; top: 1rem; right: 1rem; box-shadow: 3px 3px 0 var(--eb-accent-light); }
