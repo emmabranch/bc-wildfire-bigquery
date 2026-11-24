@@ -19,9 +19,6 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 h1.title { font-weight: 800; }
 h2 { margin-top: 2.4rem; }
 
-/* Charts and maps use the same body font */
-.js-plotly-plot .plotly text { font-family: "Inter", sans-serif !important; }
-.leaflet-container { font-family: "Inter", sans-serif; border-radius: 12px; }
 
 /* ---------- Hero: warm background behind the stripe image ---------- */
 .hero-full { background-color: #1c1310; }
@@ -34,11 +31,13 @@ h2 { margin-top: 2.4rem; }
 
 /* ---------- Other elements ---------- */
 .disclaimer {
-  font-size: 0.9rem;
-  color: #555;
-  border-left: 3px solid #f4a259;
-  padding-left: 0.8rem;
-  margin: 1.5rem 0;
+  font-size: 0.92rem;
+  color: #111111;
+  background: #ffffff;
+  border: 2px solid #111111;
+  border-left: 8px solid #f4a259;
+  padding: 0.8rem 1rem;
+  margin: 1.75rem 0;
 }
 
 /* ---------- Pipeline steps (Methods page) ---------- */
@@ -49,9 +48,10 @@ h2 { margin-top: 2.4rem; }
   margin: 1rem 0 1.5rem;
 }
 .pipe-step {
-  background: #fbf3ec;
-  border-radius: 10px;
-  border-top: 4px solid #b33a0e;
+  background: #ffffff;
+  border: 2px solid #111111;
+  border-top: 8px solid #b33a0e;
+  box-shadow: 4px 4px 0 #111111;
   padding: 0.7rem 0.8rem;
   font-size: 0.88rem;
 }

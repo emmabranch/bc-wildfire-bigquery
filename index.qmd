@@ -32,6 +32,10 @@ mha <- function(x) paste0(number(x / 1e6, accuracy = 0.01), "M")
 
 ::::: {.hero-full .column-screen style="background-image: url('figures/banner_stripes.png');"}
 
+```{=html}
+<img class="hero-motif" src="images/motif.svg" alt="">
+```
+
 :::: {.hero-inner}
 
 [Portfolio project · Google BigQuery · BigQuery GIS · R]{.eyebrow}

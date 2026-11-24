@@ -8,6 +8,7 @@ project:
     - about.qmd
   resources:
     - .nojekyll
+    - images/motif.svg
     - figures/*.png
     - results/*
 
@@ -15,7 +16,10 @@ website:
   title: "BC wildfire history"
   site-url: https://emmabranch.github.io/bc-wildfire-bigquery/
   repo-url: https://github.com/emmabranch/bc-wildfire-bigquery
+  favicon: images/favicon.png
   navbar:
+    logo: images/motif.svg
+    logo-alt: ""
     left:
       - href: index.qmd
         text: Overview
