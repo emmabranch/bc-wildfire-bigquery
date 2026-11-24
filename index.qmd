@@ -135,7 +135,7 @@ m |>
     group = "50 km around communities",
     stroke = FALSE, fillColor = eb_col$ink, fillOpacity = 1, label = ~community
   ) |>
-  addLegend("bottomright", pal = pal, values = decades, title = "Decade", opacity = 0.9) |>
+  addLegend("bottomright", pal = pal, values = decades, title = "Decade", opacity = 0.65) |>  # match the fill
   addLayersControl(
     overlayGroups = c(decades, "50 km around communities"),
     options = layersControlOptions(collapsed = TRUE)
