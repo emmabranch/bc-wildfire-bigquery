@@ -6,6 +6,8 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(scales)
+source("R/theme_eb.R")             # shared chart style from the brand kit
+eb_use("bc-wildfire-bigquery")
 
 project <- "bc-wildfire-bigquery"
 
@@ -43,7 +45,7 @@ annual_long <- annual |>
   ))
 
 fig1 <- ggplot(annual_long, aes(FIRE_YEAR, value)) +
-  geom_col(fill = "#C1440E", width = 0.8) +
+  geom_col(fill = eb_accent(), colour = eb_col$ink, linewidth = 0.15, width = 0.8) +
   facet_wrap(~ metric, ncol = 1, scales = "free_y") +
   scale_y_continuous(labels = label_comma()) +
   labs(
@@ -52,11 +54,10 @@ fig1 <- ggplot(annual_long, aes(FIRE_YEAR, value)) +
     x = NULL, y = NULL,
     caption = "Data: BC Wildfire Service via BC Data Catalogue. Analysis in Google BigQuery."
   ) +
-  theme_minimal(base_size = 12) +
-  theme(strip.text = element_text(face = "bold", hjust = 0),
-        panel.grid.minor = element_blank())
+  theme_eb()
 
-ggsave("figures/fig1_annual_fires_area.png", fig1, width = 9, height = 6, dpi = 300)
+ggsave("figures/fig1_annual_fires_area.png", fig1, width = 9, height = 6, dpi = 300,
+       device = ragg::agg_png)
 
 # ---- Figure 2: mean annual area burned by fire centre and decade ----------
 by_centre <- run_sql("
@@ -81,7 +82,7 @@ by_centre <- run_sql("
 ")
 
 fig2 <- ggplot(by_centre, aes(factor(decade), mean_annual_area_ha / 1000)) +
-  geom_col(fill = "#C1440E", width = 0.75) +
+  geom_col(fill = eb_accent(), colour = eb_col$ink, linewidth = 0.25, width = 0.75) +
   facet_wrap(~ fire_centre, ncol = 3) +
   scale_y_continuous(labels = label_comma()) +
   labs(
@@ -90,10 +91,8 @@ fig2 <- ggplot(by_centre, aes(factor(decade), mean_annual_area_ha / 1000)) +
     x = "Decade", y = "Thousand hectares per year",
     caption = "Data: BC Wildfire Service via BC Data Catalogue. Analysis in Google BigQuery."
   ) +
-  theme_minimal(base_size = 12) +
-  theme(strip.text = element_text(face = "bold", hjust = 0),
-        panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank(),
-        axis.text.x = element_text(angle = 45, hjust = 1))
+  theme_eb() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-ggsave("figures/fig2_area_by_centre_decade.png", fig2, width = 10, height = 6, dpi = 300)
+ggsave("figures/fig2_area_by_centre_decade.png", fig2, width = 10, height = 6, dpi = 300,
+       device = ragg::agg_png)

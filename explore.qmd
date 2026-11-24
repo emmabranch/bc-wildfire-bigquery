@@ -13,6 +13,7 @@ library(plotly)
 library(sf)
 library(scales)
 library(knitr)
+source("R/theme_eb.R")   # shared chart style from the brand kit
 
 annual <- read_csv("results/annual.csv", show_col_types = FALSE)
 centre <- read_csv("results/centre_decade.csv", show_col_types = FALSE)
@@ -22,6 +23,8 @@ large  <- st_read("results/large_fires.geojson", quiet = TRUE) |> st_drop_geomet
 
 ember <- "#b33a0e"
 amber <- "#f4a259"
+fire_ramp <- c(eb_col$sunflower, eb_col$tomato, ember, eb_col$ink)  # same ramp as the map
+outline <- list(color = eb_col$ink, width = 0.5)
 ```
 
 ## Fire seasons, year by year
@@ -32,12 +35,12 @@ The top panel shows area burned and the bottom panel shows the number of fires. 
 #| label: annual
 p_area <- plot_ly(
   annual, x = ~fire_year, y = ~area_burned_ha / 1000, type = "bar",
-  marker = list(color = ember),
+  marker = list(color = ember, line = outline),
   hovertemplate = "%{x}: %{y:,.0f} thousand ha<extra></extra>"
 )
 p_fires <- plot_ly(
   annual, x = ~fire_year, y = ~n_fires, type = "bar",
-  marker = list(color = amber),
+  marker = list(color = amber, line = outline),
   hovertemplate = "%{x}: %{y:,} fires<extra></extra>"
 )
 
@@ -49,6 +52,7 @@ subplot(p_area, p_fires, nrows = 2, shareX = TRUE, titleY = TRUE) |>
     xaxis  = list(title = ""),
     margin = list(l = 70)
   ) |>
+  eb_plotly() |>
   config(displayModeBar = FALSE)
 ```
 
@@ -67,7 +71,8 @@ plot_ly(
   z = ~log10(mean_annual_area_ha + 1),
   customdata = ~mean_annual_area_ha / 1000,
   type = "heatmap",
-  colors = colorRamp(c("#fbe9d7", "#f4a259", "#e4572e", "#a4161a", "#4a0b0b")),
+  colors = colorRamp(fire_ramp),
+  xgap = 2, ygap = 2,
   hovertemplate = "%{y} Fire Centre, %{x}<br>%{customdata:,.1f} thousand ha per season<extra></extra>",
   colorbar = list(
     title = "Hectares<br>per season",
@@ -76,6 +81,7 @@ plot_ly(
   )
 ) |>
   layout(xaxis = list(title = ""), yaxis = list(title = "")) |>
+  eb_plotly(grid = "none") |>
   config(displayModeBar = FALSE)
 ```
 
@@ -99,6 +105,7 @@ plot_ly(
   cause_long, y = ~cause, x = ~pct, color = ~measure,
   colors = c("Share of fires" = amber, "Share of area burned" = ember),
   type = "bar", orientation = "h",
+  marker = list(line = outline),
   hovertemplate = "%{y}: %{x:.1f}%<extra></extra>"
 ) |>
   layout(
@@ -108,6 +115,7 @@ plot_ly(
                  categoryarray = rev(c("Lightning", "Person", "Unknown"))),
     legend = list(orientation = "h", y = -0.15)
   ) |>
+  eb_plotly(grid = "x") |>
   config(displayModeBar = FALSE)
 ```
 
@@ -117,18 +125,39 @@ Total area burned within 50 km of five BC communities, by decade. BigQuery GIS c
 
 ```{r}
 #| label: communities
-plot_ly(
-  comm, x = ~paste0(decade, "s"), y = ~area_burned_within_50km_ha / 1000,
-  color = ~community,
-  colors = c("#1c1310", ember, amber, "#7a8b99", "#2a6f97"),
-  type = "scatter", mode = "lines+markers",
-  hovertemplate = "%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}</extra>"
-) |>
+# Kamloops is highlighted in ember; the other four communities are grey, each with its own dash.
+# Every line is labelled at its 2020s end, and hover still names each one.
+comm_plot <- comm |>
+  mutate(decade_lab = paste0(decade, "s"), kha = area_burned_within_50km_ha / 1000)
+grey  <- "#8C8373"
+ends  <- comm_plot |> filter(decade == max(decade))
+# Prince George and Williams Lake both end near zero, so nudge their labels apart
+ends$yshift <- c("Prince George" = -7, "Williams Lake" = 7)[ends$community]
+ends$yshift[is.na(ends$yshift)] <- 0
+
+plot_ly(comm_plot, x = ~decade_lab, y = ~kha,
+        hovertemplate = "%{x}: %{y:,.1f} thousand ha<extra>%{fullData.name}</extra>") |>
+  add_trace(data = filter(comm_plot, community != "Kamloops"),
+            linetype = ~community, linetypes = c("dot", "dash", "dashdot", "longdash"),
+            type = "scatter", mode = "lines+markers",
+            line = list(color = grey, width = 1.8), marker = list(color = grey, size = 5)) |>
+  add_trace(data = filter(comm_plot, community == "Kamloops"), name = "Kamloops",
+            type = "scatter", mode = "lines+markers",
+            line = list(color = ember, width = 3.5),
+            marker = list(color = ember, size = 8, line = outline)) |>
+  add_annotations(data = filter(ends, community != "Kamloops"), x = ~decade_lab, y = ~kha,
+                  text = ~community, xanchor = "left", xshift = 8, yshift = ~yshift,
+                  showarrow = FALSE, font = list(color = eb_col$ink, size = 12)) |>
+  add_annotations(data = filter(ends, community == "Kamloops"), x = ~decade_lab, y = ~kha,
+                  text = "<b>Kamloops</b>", xanchor = "left", xshift = 8,
+                  showarrow = FALSE, font = list(color = ember, size = 13)) |>
   layout(
+    showlegend = FALSE,
     xaxis = list(title = ""),
     yaxis = list(title = "Area burned within 50 km<br>(thousand ha)"),
-    legend = list(orientation = "h", y = -0.15)
+    margin = list(r = 110)
   ) |>
+  eb_plotly() |>
   config(displayModeBar = FALSE)
 ```
 
