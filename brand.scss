@@ -90,6 +90,12 @@ a:focus-visible, button:focus-visible, .btn:focus-visible, summary:focus-visible
 .btn-accent { background: var(--eb-accent-light); color: $eb-ink; }
 .btn-accent:hover, .btn-accent:focus { background: var(--eb-accent-light); color: $eb-ink; }
 .btn-ghost { background: $eb-white; color: $eb-ink; }
+main p > .btn { margin: 0 0.7rem 0.7rem 0; }
+/* Bootstrap's own button styles, in the same family */
+.btn-primary, .btn-primary:hover, .btn-primary:focus { background: #{$eb-cobalt}; color: $eb-white; }
+.btn-outline-primary, .btn-outline-secondary { background: $eb-white; color: $eb-ink; }
+.btn-outline-primary:hover, .btn-outline-primary:focus,
+.btn-outline-secondary:hover, .btn-outline-secondary:focus { background: $eb-sun; color: $eb-ink; }
 .btn-ghost:hover, .btn-ghost:focus { background: $eb-sun; color: $eb-ink; }
 
 /* ---------- Hero accent words use the project colour ---------- */
